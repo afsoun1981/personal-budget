@@ -3,7 +3,6 @@ var gulp = require('gulp');
 
 // Include Our Plugins
 var del = require('del');
-var sequence = require('run-sequence');
 var jshint = require('gulp-jshint');
 var compass = require('gulp-compass');
 var minifycss = require('gulp-minify-css');
