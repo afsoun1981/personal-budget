@@ -1,0 +1,6 @@
+{
+  "directory": "frontend/lib/",
+  "analytics": false,
+  "timeout": 120000
+}
+
