@@ -1,7 +1,8 @@
-define('main', ['angular', 'sample', 'service1', 'service2'], function(angular, sample, service1, service2){
+define('main', ['angular', 'sample', 'service1', 'service2', 'ui.bootstrap'], function(angular, sample, service1, service2, uiBootstrap){
 	console.log('Main app...');
 
 	var main = angular.module('tutorial4', [
+		'ui.bootstrap',
 		'tutorial4.sample'
 	]);
 

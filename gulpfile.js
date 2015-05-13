@@ -39,7 +39,7 @@ var config = {
   src_css_dir: 'src/main/app/css/',
   dest_css_dir: 'dest/css/',
 
-  dest_img_dir: 'src/main/app/img/',
+  src_img_dir: 'src/main/app/img/',
   dest_img_dir: 'dest/img/',
 
   optimized: 'main-dist.js'
@@ -82,11 +82,15 @@ gulp.task('optimize', ['scripts'], function(cb) {
 		baseUrl: config.build_js_dir, 
 		out: config.dest_js_dir+'main.js',
 		paths: {
-	        angular: '../../'+config.src_lib_dir+'angular/angular.min'
+			angular: '../../'+config.src_lib_dir+'angular/angular.min',
+			'ui.bootstrap': '../../'+config.src_lib_dir+'angular-bootstrap/ui-bootstrap-tpls.min'
 	    },
 		shim: {
 			angular: {
 				exports: 'angular'
+			},
+			'ui.bootstrap': {
+				deps: ['angular']
 			}
 		}
 	};
@@ -122,7 +126,7 @@ gulp.task('compass', function(cb) {
 gulp.task('css', ['compass'], function() {
 	gulp.src([
 		config.src_lib_dir+'bootstrap/dist/css/bootstrap.min.css',
-		//config.src_lib_dir+'bootstrap/dist/css/bootstrap-theme.css',
+		config.src_lib_dir+'bootstrap/dist/css/bootstrap-theme.css',
 		
 		config.dest_compass_dir+'**/*.css', 
 		config.src_css_dir+'**/*.css'])
@@ -135,7 +139,7 @@ gulp.task('css', ['compass'], function() {
 });
 
 gulp.task('image', ['compass'], function() {
-	gulp.src([config.dest_compass_img_dir+'**/*'])
+	gulp.src([config.dest_compass_img_dir+'**/*',config.src_img_dir+'**/*'])
 		.pipe(gulp.dest(config.dest_img_dir));
 });
 

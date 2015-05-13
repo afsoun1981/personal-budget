@@ -22,7 +22,8 @@ require.config({
     paths: {
         jQuery: SRC_RE_BASE + 'frontend/lib/jquery/dist/jquery',
         angular: SRC_RE_BASE + 'frontend/lib/angular/angular',
-        angularMock: SRC_RE_BASE + 'frontend/lib/angular-mocks/angular-mocks'
+        angularMock: SRC_RE_BASE + 'frontend/lib/angular-mocks/angular-mocks',
+        'ui.bootstrap': SRC_RE_BASE + 'frontend/lib/angular-bootstrap/ui-bootstrap-tpls'
     },
 
     shim: {
@@ -35,7 +36,10 @@ require.config({
         angularMock: {
             deps: ['angular'],
             exports: 'angular.mock'
-        }
+        },
+		'ui.bootstrap': {
+            deps: ['angular']
+		}
     },
 
     // dynamically load all test files
