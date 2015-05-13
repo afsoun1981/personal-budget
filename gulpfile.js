@@ -10,6 +10,7 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var server = require('gulp-webserver');
+var sequence = require('run-sequence');
 var karma = require('karma').server;
 var requirejs = require('requirejs');
 
@@ -55,47 +56,59 @@ gulp.task('clean', function(cb) {
   ], cb);
 });
 
-gulp.task('lib', ['clean'], function() {
+gulp.task('lib', function() {
 	// gulp.src(config.src_lib_dir+'jquery/dist/jquery*.js')
 	// 	.pipe(gulp.dest(config.dest_lib_dir+'jquery/dist'));
 	//     gulp.src(config.src_lib_dir+'bootstrap/dist/**/*')
 	// 	.pipe(gulp.dest(config.dest_lib_dir+'bootstrap/dist'));
-	// gulp.src(config.src_lib_dir+'angular/angular*.js')
-	// 	.pipe(gulp.dest(config.dest_lib_dir+'angular'));
+	gulp.src(config.src_lib_dir+'angular/angular*.js')
+	 	.pipe(gulp.dest(config.dest_lib_dir+'angular'));
 	gulp.src(config.src_lib_dir+'requirejs/require.js')
 		.pipe(gulp.dest(config.dest_lib_dir+'requirejs'));
 });
 
-gulp.task('html', ['clean'], function() {
-	gulp.src([
-        config.src_dir+'/*.html',
-        config.src_dir+'/favicon.ico'])
+gulp.task('favicon', function() {
+	gulp.src(config.src_dir+'favicon.ico')
 		.pipe(gulp.dest(config.dest_dir));
 });
 
-gulp.task('scripts', ['clean'], function(cb) {
+gulp.task('html', ['favicon'], function() {
+	gulp.src(config.src_dir+'index.dest.html')
+		.pipe(rename('index.html'))
+		.pipe(gulp.dest(config.dest_dir));
+});
+
+gulp.task('scripts', function(cb) {
   gulp.src(config.src_js_dir+'**/*.js')
       .pipe(gulp.dest(config.build_js_dir))
 	  .on('end', cb);
 });
 
-gulp.task('optimize', ['clean', 'scripts'], function(cb) {
+gulp.task('optimize', ['lib', 'scripts'], function(cb) {
 	var requireConf = {
-	  name: 'main', 
-	  baseUrl: config.build_js_dir, 
-	  out: config.dest_js_dir+'main.js'
-  };
-  
-  requirejs.optimize(requireConf, function(result) {
-	console.log('Optimized:');
-	console.log(result);
-	cb();
-  }, function(result) {
-	  cb(result);
-  });
+		name: 'main', 
+		baseUrl: config.build_js_dir, 
+		out: config.dest_js_dir+'main.js',
+		paths: {
+	        angular: '../../'+config.dest_lib_dir+'angular/angular.min'
+	    },
+		shim: {
+			angular: {
+				exports: 'angular'
+			}
+		}
+	};
+
+	requirejs.optimize(requireConf, function(result) {
+		console.log('Optimized:');
+		console.log(result);
+		cb();
+	}, function(result) {
+		cb(result);
+	});
 });
 
-gulp.task('compass', ['clean'], function(cb) {	
+gulp.task('compass', function(cb) {	
     gulp.src(config.src_compass_dir+'**/*.scss')
         .pipe(compass({
 			//sourcemap: true,
@@ -114,8 +127,12 @@ gulp.task('compass', ['clean'], function(cb) {
 		.on('end', cb);
 });
 
-gulp.task('css', ['clean', 'compass'], function() {
-	gulp.src([config.dest_compass_dir+'**/*.css', config.src_css_dir+'**/*.css'])
+gulp.task('css', ['compass'], function() {
+	gulp.src([
+		config.src_lib_dir+'bootstrap/dist/css/bootstrap.min.css',
+		
+		config.dest_compass_dir+'**/*.css', 
+		config.src_css_dir+'**/*.css'])
         .pipe(concat('style.css'))
         .pipe(gulp.dest(config.dest_css_dir))
 		.pipe(rename({ suffix: '.min' }))
@@ -123,13 +140,14 @@ gulp.task('css', ['clean', 'compass'], function() {
 	.pipe(gulp.dest(config.dest_css_dir));
 });
 
-gulp.task('image', ['clean', 'compass'], function() {
+gulp.task('image', ['compass'], function() {
 	gulp.src([config.dest_compass_img_dir+'**/*'])
 		.pipe(gulp.dest(config.dest_img_dir));
 });
 
-
-gulp.task('build', ['clean', 'lib', 'html', 'css', 'image', 'scripts', 'optimize']);
+gulp.task('build', ['clean'], function(cb) {
+	sequence(['lib', 'html', 'css', 'image', 'scripts', 'optimize'], cb);
+});
 
 /** Test tasks **/
 
@@ -161,6 +179,11 @@ gulp.task('debug', function() {
 });
 
 gulp.task('run', ['build'], function() {
+	gulp.watch(config.src_lib_dir+'**', ['lib']);
+	gulp.watch(config.src_dir+'/*.html', ['html']);
+	gulp.watch(config.src_js_dir+'**/*.js', ['optimize']);
+	gulp.watch(config.src_compass_dir+'/**/*.scss', ['css']);
+	
 	gulp.src(config.dest_dir).pipe(server({
       port: 8000,
       livereload: true

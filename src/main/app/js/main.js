@@ -1,14 +1,13 @@
-require.config( {
-    paths : {
-    }
+define('main', ['angular', 'service1', 'service2'], function(angular){
+	console.log('Main app...');
+
+	var main = angular.module('tutorial4', []);
+
+	return main;
 });
 
-define('main', ['service1', 'service2'], function(){
-  console.log('Main app...');
-  
-  return 'main def';
-});
-
-require(['main'], function(main){
-  console.log('bootstraped...');
+require(['angular', 'main'], function(angular, main){
+	angular.bootstrap(document.body, [main.name]);
+	console.log('bootstraped...', angular);
+	console.log(main);
 });
