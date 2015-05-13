@@ -1,6 +1,10 @@
+/* fix ui.bootstrap issue with href */
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
 span.logo {
+	margin-top: 5px;
     display: block;
-    width: 220px;
-    height: 169px;
+    width: 109px;
+    height: 105px;
     background-image: url("../img/logo.png");
 }
