@@ -26,7 +26,7 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
-        'src/main/app/js/bootstrap.js'
+        'src/main/app/require.conf.js'
     ],
 
 

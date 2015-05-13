@@ -56,17 +56,6 @@ gulp.task('clean', function(cb) {
   ], cb);
 });
 
-gulp.task('lib', function() {
-	// gulp.src(config.src_lib_dir+'jquery/dist/jquery*.js')
-	// 	.pipe(gulp.dest(config.dest_lib_dir+'jquery/dist'));
-	//     gulp.src(config.src_lib_dir+'bootstrap/dist/**/*')
-	// 	.pipe(gulp.dest(config.dest_lib_dir+'bootstrap/dist'));
-	gulp.src(config.src_lib_dir+'angular/angular*.js')
-	 	.pipe(gulp.dest(config.dest_lib_dir+'angular'));
-	gulp.src(config.src_lib_dir+'requirejs/require.js')
-		.pipe(gulp.dest(config.dest_lib_dir+'requirejs'));
-});
-
 gulp.task('favicon', function() {
 	gulp.src(config.src_dir+'favicon.ico')
 		.pipe(gulp.dest(config.dest_dir));
@@ -79,18 +68,21 @@ gulp.task('html', ['favicon'], function() {
 });
 
 gulp.task('scripts', function(cb) {
-  gulp.src(config.src_js_dir+'**/*.js')
-      .pipe(gulp.dest(config.build_js_dir))
-	  .on('end', cb);
+	gulp.src(config.src_lib_dir+'requirejs/require.js')
+		.pipe(gulp.dest(config.dest_lib_dir+'requirejs'));
+
+	gulp.src(config.src_js_dir+'**/*.js')
+		.pipe(gulp.dest(config.build_js_dir))
+		.on('end', cb);
 });
 
-gulp.task('optimize', ['lib', 'scripts'], function(cb) {
+gulp.task('optimize', ['scripts'], function(cb) {
 	var requireConf = {
 		name: 'main', 
 		baseUrl: config.build_js_dir, 
 		out: config.dest_js_dir+'main.js',
 		paths: {
-	        angular: '../../'+config.dest_lib_dir+'angular/angular.min'
+	        angular: '../../'+config.src_lib_dir+'angular/angular.min'
 	    },
 		shim: {
 			angular: {
@@ -148,7 +140,7 @@ gulp.task('image', ['compass'], function() {
 });
 
 gulp.task('build', ['clean'], function(cb) {
-	sequence(['lib', 'html', 'css', 'image', 'scripts', 'optimize'], cb);
+	sequence(['html', 'css', 'image', 'scripts', 'optimize'], cb);
 });
 
 /** Test tasks **/
@@ -181,7 +173,6 @@ gulp.task('debug', function() {
 });
 
 gulp.task('run', ['build'], function() {
-	gulp.watch(config.src_lib_dir+'**', ['lib']);
 	gulp.watch(config.src_dir+'/*.html', ['html']);
 	gulp.watch(config.src_js_dir+'**/*.js', ['optimize']);
 	gulp.watch(config.src_compass_dir+'/**/*.scss', ['css']);

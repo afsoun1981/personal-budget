@@ -1,12 +1,11 @@
-define(['angular', 'main'], function(angular, main) {
+define(['angular', 'main', 'angularMock'], function(angular, main) {
     'use strict;'
 
-	console.log('testing instance: '+main);
+	console.log('testing main instance: '+main);
 	
-	// Initialize main app
-	angular.bootstrap(document.body, [main.name]);
+	// Angular mocks automatically bootstraps the app
 	
-    describe('[main tests]', function () {
+    describe('[main tests]', function () {		
         it('main should have pass', function() {
             expect(true).toBe(true);
         });
