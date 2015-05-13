@@ -130,9 +130,11 @@ gulp.task('compass', function(cb) {
 gulp.task('css', ['compass'], function() {
 	gulp.src([
 		config.src_lib_dir+'bootstrap/dist/css/bootstrap.min.css',
+		//config.src_lib_dir+'bootstrap/dist/css/bootstrap-theme.css',
 		
 		config.dest_compass_dir+'**/*.css', 
 		config.src_css_dir+'**/*.css'])
+		/* Optimize */
         .pipe(concat('style.css'))
         .pipe(gulp.dest(config.dest_css_dir))
 		.pipe(rename({ suffix: '.min' }))
@@ -172,7 +174,7 @@ gulp.task('testOnce', ['build', 'unittestOnce']);
 /** Run tasks **/
 
 gulp.task('debug', function() {
-	gulp.src([config.src_dir, 'frontend/']).pipe(server({
+	gulp.src([config.src_dir, 'frontend/', 'res/']).pipe(server({
       port: 8000,
       livereload: true
     }));
