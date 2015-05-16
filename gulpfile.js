@@ -24,6 +24,12 @@ var config = {
   dest_dir: 'dest/',
   tmp_dir: 'build/tmp/',
 	
+  src_template_dir: 'src/main/app/template/',
+  dest_template_dir: 'dest/template/',
+
+  src_partial_dir: 'src/main/app/partial/',
+  dest_partial_dir: 'dest/partial/',
+  
   src_lib_dir: 'frontend/lib/',
   dest_lib_dir: 'dest/lib/',
 
@@ -67,6 +73,16 @@ gulp.task('html', ['favicon'], function() {
 		.pipe(gulp.dest(config.dest_dir));
 });
 
+gulp.task('partial', function() {
+	gulp.src(config.src_partial_dir+'**/*.html')
+	.pipe(gulp.dest(config.dest_partial_dir));
+});
+
+gulp.task('template', function() {
+	gulp.src(config.src_template_dir+'**/*.html')
+	.pipe(gulp.dest(config.dest_template_dir));
+});
+
 gulp.task('scripts', function(cb) {
 	gulp.src(config.src_lib_dir+'requirejs/require.js')
 		.pipe(gulp.dest(config.dest_lib_dir+'requirejs'));
@@ -83,7 +99,8 @@ gulp.task('optimize', ['scripts'], function(cb) {
 		out: config.dest_js_dir+'main.js',
 		paths: {
 			angular: '../../'+config.src_lib_dir+'angular/angular.min',
-			'ui.bootstrap': '../../'+config.src_lib_dir+'angular-bootstrap/ui-bootstrap-tpls.min'
+			'ui.bootstrap': '../../'+config.src_lib_dir+'angular-bootstrap/ui-bootstrap-tpls.min',
+            'ui.grid': '../../'+config.src_lib_dir+'ui-grid-unstable/ui-grid-unstable.min'
 	    },
 		shim: {
 			angular: {
@@ -91,7 +108,10 @@ gulp.task('optimize', ['scripts'], function(cb) {
 			},
 			'ui.bootstrap': {
 				deps: ['angular']
-			}
+			},
+            'ui.grid': {
+                deps: ['angular']
+            }
 		}
 	};
 
@@ -123,11 +143,22 @@ gulp.task('compass', function(cb) {
 		.on('end', cb);
 });
 
-gulp.task('css', ['compass'], function() {
+gulp.task('font', function() {
+    gulp.src([
+        config.src_lib_dir+'ui-grid-unstable/**/*.ttf',
+        config.src_lib_dir+'ui-grid-unstable/**/*.woff',
+        config.src_lib_dir+'ui-grid-unstable/**/*.eot',
+        config.src_lib_dir+'ui-grid-unstable/**/*.svg'
+    ])
+    .pipe(gulp.dest(config.dest_css_dir));
+});
+
+gulp.task('css', ['compass', 'font'], function() {
 	gulp.src([
 		config.src_lib_dir+'bootstrap/dist/css/bootstrap.min.css',
 		config.src_lib_dir+'bootstrap/dist/css/bootstrap-theme.css',
-		
+        config.src_lib_dir+'ui-grid-unstable/ui-grid-unstable.min.css',
+
 		config.dest_compass_dir+'**/*.css', 
 		config.src_css_dir+'**/*.css'])
 		/* Optimize */
@@ -144,7 +175,7 @@ gulp.task('image', ['compass'], function() {
 });
 
 gulp.task('build', ['clean'], function(cb) {
-	sequence(['html', 'css', 'image', 'scripts', 'optimize'], cb);
+	sequence(['html', 'partial', 'template', 'css', 'image', 'scripts', 'optimize'], cb);
 });
 
 /** Test tasks **/
@@ -177,9 +208,11 @@ gulp.task('debug', function() {
 });
 
 gulp.task('run', ['build'], function() {
-	gulp.watch(config.src_dir+'/*.html', ['html']);
+	gulp.watch(config.src_dir+'*.html', ['html']);
+	gulp.watch(config.src_partial_dir+'**/*.html', ['partial']);
+	gulp.watch(config.src_template_dir+'**/*.html', ['template']);
 	gulp.watch(config.src_js_dir+'**/*.js', ['optimize']);
-	gulp.watch(config.src_compass_dir+'/**/*.scss', ['css']);
+	gulp.watch(config.src_compass_dir+'**/*.scss', ['css']);
 	
 	gulp.src(config.dest_dir).pipe(server({
       port: 8000,

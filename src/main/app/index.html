@@ -7,7 +7,9 @@
 		<!-- Debug css files -->
 		<link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css">
 		<link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap-theme.css">
+        <link rel="stylesheet" href="lib/ui-grid-unstable/ui-grid-unstable.min.css">
 
+        <!-- Main css files -->
 		<link rel="stylesheet" href="css/static_style.css">
 		<link rel="stylesheet" href="css/style.css">
 		
@@ -28,9 +30,16 @@
 		<nav>
 			<div class="container">				
 				<tabset>
-					<tab heading="Spending">Spending content</tab>
-					<tab heading="Budget">Budget content</tab>
-					<tab heading="Shopping">Shopping content</tab>
+					<tab heading="Spending">
+						<!--div ng-include="'partial/spendingList.html'"></div-->
+					</tab>
+					<tab heading="Budget">
+						<div ng-include="'partial/budgetList.html'"></div>
+					</tab>
+					<tab heading="Shopping">
+						<alert type="info">Hello {{sample.value}}! <span class="label label-default">Hello {{sample.value}}!</span></alert>
+						<p><a href="#">Spendings <span class="badge">42</span></a></p>
+					</tab>
 					<li role="presentation" class="dropdown" dropdown on-toggle="toggled(open)">
 					    <a class="dropdown-toggle" dropdown-toggle>
 							Other <span class="caret"></span>
@@ -54,19 +63,15 @@
 		</nav>
 		
 		<div ng-controller="SampleCtrl as sample" class="container">
-			<ol class="breadcrumb">
-			  <li><a href="#">Spending</a></li>
-			  <li><a href="#">Reza</a></li>
-			  <li class="active">March 2015</li>
-			</ol>
-			
-			<alert type="info">Hello ui.bootstrap!</alert>
-			
-			<div class="alert alert-info" role="alert">Hello {{sample.value}}! <span class="label label-default">Hello {{sample.value}}!</span></div>
-			
-			<p><a href="#">Spendings <span class="badge">42</span></a></p>
-			
-			<div class="panel panel-default">
+            <div ui-grid="sample.gridOptions1" class="myGrid"></div>
+
+            <!--ol class="breadcrumb">
+              <li><a href="#">Spending</a></li>
+              <li><a href="#">Reza</a></li>
+              <li class="active">March 2015</li>
+            </ol-->
+						
+			<!--div class="panel panel-default">
 				<div class="panel-heading">
 				    <h3 class="panel-title">Panel title</h3>
 				  </div>
@@ -79,9 +84,9 @@
 				</form>
 			  </div>
 			  <div class="panel-footer">Panel footer</div>
-			</div>
+			</div-->
 
-			<div class="panel panel-default">
+			<!--div class="panel panel-default">
 			  <div class="panel-heading">Panel heading</div>
 			  <div class="panel-body">
 			    <p>Spending panel description</p>
@@ -95,9 +100,9 @@
 				</tr>
 			  </table>
 			  <div class="panel-footer">1 spendings</div>
-			</div>
+			</div-->
 			
-			<nav>
+			<!--nav>
 			  <ul class="pagination">
 			     <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
 			     <li class="active"><a href="#">1</a></li>
@@ -107,10 +112,11 @@
 			     <li><a href="#">5</a></li>
 			     <li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
 			  </ul>
-			</nav>
+			</nav-->
 			
-			<div class="well">Look, I'm in a well!</div>
 		</div>
+
+		<p style="height: 80px;"></p>
 
 		<footer class="navbar navbar-default navbar-fixed-bottom">
 			<div class="container" >

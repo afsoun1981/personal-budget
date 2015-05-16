@@ -1,9 +1,18 @@
-define('main', ['angular', 'sample', 'service1', 'service2', 'ui.bootstrap'], function(angular, sample, service1, service2, uiBootstrap){
+define('main', [
+	'angular',
+	'sample',
+	'directive/grid',
+	'service1',
+	'service2',
+    'ui.grid',
+	'ui.bootstrap'], function(angular, sample, spending, service1, service2, uiGrid, uiBootstrap){
 	console.log('Main app...');
 
 	var main = angular.module('tutorial4', [
+        'ui.grid',
 		'ui.bootstrap',
-		'tutorial4.sample'
+		'tutorial4.sample',
+		'tutorial4.directive.grid'
 	]);
 
 	return main;

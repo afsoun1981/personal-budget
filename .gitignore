@@ -6,3 +6,7 @@ build
 dest
 
 node_modules
+
+#
+*.iml
+.idea

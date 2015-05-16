@@ -8,3 +8,8 @@ span.logo {
     height: 105px;
     background-image: url("../img/logo.png");
 }
+
+.myGrid {
+    width: 500px;
+    height: 250px;
+}

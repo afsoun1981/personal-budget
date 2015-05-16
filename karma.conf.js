@@ -18,6 +18,7 @@ module.exports = function(config) {
         { pattern: 'frontend/lib/angular/angular.js', included: false },
         { pattern: 'frontend/lib/angular-mocks/angular-mocks.js', included: false },
         { pattern: 'frontend/lib/angular-bootstrap/ui-bootstrap-tpls.js', included: false },
+        { pattern: 'frontend/lib/ui-grid-unstable/ui-grid-unstable.min.js', included: false },
 
         { pattern: 'src/main/app/js/**/*.js', included: false },
         { pattern: 'src/test/app/js/**/*.spec.js', included: false },

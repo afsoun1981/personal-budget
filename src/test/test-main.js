@@ -23,7 +23,8 @@ require.config({
         jQuery: SRC_RE_BASE + 'frontend/lib/jquery/dist/jquery',
         angular: SRC_RE_BASE + 'frontend/lib/angular/angular',
         angularMock: SRC_RE_BASE + 'frontend/lib/angular-mocks/angular-mocks',
-        'ui.bootstrap': SRC_RE_BASE + 'frontend/lib/angular-bootstrap/ui-bootstrap-tpls'
+        'ui.bootstrap': SRC_RE_BASE + 'frontend/lib/angular-bootstrap/ui-bootstrap-tpls',
+        'ui.grid': SRC_RE_BASE + 'frontend/lib/ui-grid-unstable/ui-grid-unstable.min'
     },
 
     shim: {
@@ -39,7 +40,10 @@ require.config({
         },
 		'ui.bootstrap': {
             deps: ['angular']
-		}
+		},
+        'ui.grid': {
+            deps: ['angular']
+        }
     },
 
     // dynamically load all test files

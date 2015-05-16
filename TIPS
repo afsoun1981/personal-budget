@@ -1,0 +1,6 @@
+update requirejs path in all these files:
+
+gulpfile.js
+karma.conf.js
+src/test/main-test.js
+src/main/app/require.conf.js
